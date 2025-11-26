@@ -1,4 +1,6 @@
-#include <stdio.h>
+#include <iostream>
+using namespace std;
+
 #define MAX 100
 
 int visited[MAX] = {0};
@@ -6,7 +8,7 @@ int adj[MAX][MAX] = {0};
 
 void DFS(int node, int V) {
     visited[node] = 1;
-    printf("%d ", node);
+    cout << node << " ";
     
     for (int i = 0; i < V; i++) {
         if (adj[node][i] == 1 && !visited[i]) {
@@ -25,8 +27,8 @@ int main() {
         adj[v][u] = 1;
     }
     
-    printf("DFS Traversal: ");
+    cout << "DFS Traversal: ";
     DFS(0, V);
-    printf("\n");
+    cout << endl;
     return 0;
 }
