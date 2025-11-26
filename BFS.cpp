@@ -1,4 +1,6 @@
-#include <stdio.h>
+#include <iostream>
+using namespace std;
+
 #define MAX 100
 
 int queue[MAX], front = -1, rear = -1;
@@ -20,11 +22,11 @@ void BFS(int start, int V) {
     enqueue(start);
     visited[start] = 1;
     
-    printf("BFS Traversal: ");
+    cout << "BFS Traversal: ";
     
     while (front <= rear) {
         int current = dequeue();
-        printf("%d ", current);
+        cout << current << " ";
         
         for (int i = 0; i < V; i++) {
             if (adj[current][i] == 1 && !visited[i]) {
@@ -33,7 +35,7 @@ void BFS(int start, int V) {
             }
         }
     }
-    printf("\n");
+    cout << endl;
 }
 
 int main() {
