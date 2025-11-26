@@ -1,8 +1,10 @@
-#include <stdio.h>
-#include <limits.h>
+#include <iostream>
+#include <climits>
+using namespace std;
+
 #define MAX 100
 
-int minKey(int key[], int mstSet[], int V) {
+int minKey(int key[], bool mstSet[], int V) {
     int min = INT_MAX, min_index;
     
     for (int v = 0; v < V; v++) {
@@ -15,21 +17,22 @@ int minKey(int key[], int mstSet[], int V) {
 }
 
 void printMST(int parent[], int graph[MAX][MAX], int V) {
-    printf("Edges in MST:\n");
+    cout << "Edges in MST:" << endl;
     int minCost = 0;
     for (int i = 1; i < V; i++) {
-        printf("%d -- %d == %d\n", parent[i], i, graph[i][parent[i]]);
+        cout << parent[i] << " -- " << i << " == " << graph[i][parent[i]] << endl;
         minCost += graph[i][parent[i]];
     }
-    printf("Minimum Cost: %d\n", minCost);
+    cout << "Minimum Cost: " << minCost << endl;
 }
 
 void PrimMST(int graph[MAX][MAX], int V) {
-    int parent[MAX], key[MAX], mstSet[MAX];
+    int parent[MAX], key[MAX];
+    bool mstSet[MAX];
     
     for (int i = 0; i < V; i++) {
         key[i] = INT_MAX;
-        mstSet[i] = 0;
+        mstSet[i] = false;
     }
     
     key[0] = 0;
@@ -37,7 +40,7 @@ void PrimMST(int graph[MAX][MAX], int V) {
     
     for (int count = 0; count < V - 1; count++) {
         int u = minKey(key, mstSet, V);
-        mstSet[u] = 1;
+        mstSet[u] = true;
         
         for (int v = 0; v < V; v++) {
             if (graph[u][v] && !mstSet[v] && graph[u][v] < key[v]) {
