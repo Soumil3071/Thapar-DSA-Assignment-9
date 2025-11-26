@@ -1,5 +1,6 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include <iostream>
+using namespace std;
+
 #define MAX 100
 
 struct Edge {
@@ -10,13 +11,13 @@ struct subset {
     int parent, rank;
 };
 
-int find(struct subset subsets[], int i) {
+int find(subset subsets[], int i) {
     if (subsets[i].parent != i)
         subsets[i].parent = find(subsets, subsets[i].parent);
     return subsets[i].parent;
 }
 
-void Union(struct subset subsets[], int x, int y) {
+void Union(subset subsets[], int x, int y) {
     int xroot = find(subsets, x);
     int yroot = find(subsets, y);
     
@@ -30,17 +31,25 @@ void Union(struct subset subsets[], int x, int y) {
     }
 }
 
-int compare(const void* a, const void* b) {
-    return ((struct Edge*)a)->weight - ((struct Edge*)b)->weight;
+void bubbleSort(Edge edges[], int E) {
+    for (int i = 0; i < E - 1; i++) {
+        for (int j = 0; j < E - i - 1; j++) {
+            if (edges[j].weight > edges[j + 1].weight) {
+                Edge temp = edges[j];
+                edges[j] = edges[j + 1];
+                edges[j + 1] = temp;
+            }
+        }
+    }
 }
 
-void KruskalMST(struct Edge edges[], int V, int E) {
-    struct Edge result[MAX];
+void KruskalMST(Edge edges[], int V, int E) {
+    Edge result[MAX];
     int e = 0, i = 0;
     
-    qsort(edges, E, sizeof(edges[0]), compare);
+    bubbleSort(edges, E);
     
-    struct subset* subsets = (struct subset*)malloc(V * sizeof(struct subset));
+    subset* subsets = new subset[V];
     
     for (int v = 0; v < V; v++) {
         subsets[v].parent = v;
@@ -48,7 +57,7 @@ void KruskalMST(struct Edge edges[], int V, int E) {
     }
     
     while (e < V - 1 && i < E) {
-        struct Edge next_edge = edges[i++];
+        Edge next_edge = edges[i++];
         
         int x = find(subsets, next_edge.src);
         int y = find(subsets, next_edge.dest);
@@ -59,19 +68,19 @@ void KruskalMST(struct Edge edges[], int V, int E) {
         }
     }
     
-    printf("Edges in MST:\n");
+    cout << "Edges in MST:" << endl;
     int minCost = 0;
     for (i = 0; i < e; i++) {
-        printf("%d -- %d == %d\n", result[i].src, result[i].dest, result[i].weight);
+        cout << result[i].src << " -- " << result[i].dest << " == " << result[i].weight << endl;
         minCost += result[i].weight;
     }
-    printf("Minimum Cost: %d\n", minCost);
-    free(subsets);
+    cout << "Minimum Cost: " << minCost << endl;
+    delete[] subsets;
 }
 
 int main() {
     int V = 4, E = 5;
-    struct Edge edges[] = {
+    Edge edges[] = {
         {0, 1, 10}, {0, 2, 6}, {0, 3, 5}, {1, 3, 15}, {2, 3, 4}
     };
     
