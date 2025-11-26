@@ -1,8 +1,10 @@
-#include <stdio.h>
-#include <limits.h>
+#include <iostream>
+#include <climits>
+using namespace std;
+
 #define MAX 100
 
-int minDistance(int dist[], int sptSet[], int V) {
+int minDistance(int dist[], bool sptSet[], int V) {
     int min = INT_MAX, min_index;
     
     for (int v = 0; v < V; v++) {
@@ -15,24 +17,25 @@ int minDistance(int dist[], int sptSet[], int V) {
 }
 
 void printSolution(int dist[], int V) {
-    printf("Vertex \t Distance from Source\n");
+    cout << "Vertex \t Distance from Source" << endl;
     for (int i = 0; i < V; i++)
-        printf("%d \t %d\n", i, dist[i]);
+        cout << i << " \t " << dist[i] << endl;
 }
 
 void dijkstra(int graph[MAX][MAX], int src, int V) {
-    int dist[MAX], sptSet[MAX];
+    int dist[MAX];
+    bool sptSet[MAX];
     
     for (int i = 0; i < V; i++) {
         dist[i] = INT_MAX;
-        sptSet[i] = 0;
+        sptSet[i] = false;
     }
     
     dist[src] = 0;
     
     for (int count = 0; count < V - 1; count++) {
         int u = minDistance(dist, sptSet, V);
-        sptSet[u] = 1;
+        sptSet[u] = true;
         
         for (int v = 0; v < V; v++) {
             if (!sptSet[v] && graph[u][v] && dist[u] != INT_MAX && 
